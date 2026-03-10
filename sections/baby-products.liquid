@@ -1,0 +1,359 @@
+{% comment %}
+  Baby Wellness Brand Section
+  Converted from HTML to Shopify Liquid
+{% endcomment %}
+
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          primary: "#4E443C",
+          "background-light": "#FFFBF7",
+          "background-dark": "#1A1512",
+          "text-light": "#4E443C",
+          "text-dark": "#EFEAE4",
+          "card-light": "#FDF6EC",
+          "card-dark": "#2C2621",
+          "border-light": "#EAE0D3",
+          "border-dark": "#3D352E",
+        },
+        fontFamily: {
+          display: ["Cormorant Garamond", "serif"],
+          sans: ["Poppins", "sans-serif"],
+        },
+        borderRadius: {
+          DEFAULT: "1.5rem",
+        },
+      },
+    },
+  };
+</script>
+
+<section class="section section--page-width spacing-style" style="{% render 'spacing-style', settings: section.settings %}">
+  <div class="page-width-content">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" style="gap: {{ section.settings.cards_gap | default: 32 }}px;">
+      
+      {% comment %} Card 1: A Bond of Pure Love {% endcomment %}
+      <div class="flex flex-col rounded-lg overflow-hidden">
+        <div class="relative pt-[110%]">
+          {% if section.settings.card1_image != blank %}
+            {{
+              section.settings.card1_image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                alt: section.settings.card1_image_alt,
+                class: 'absolute top-0 left-0 w-full h-full object-cover rounded-t-lg'
+            }}
+          {% else %}
+            <img 
+              alt="{% if section.settings.card1_image_alt != blank %}{{ section.settings.card1_image_alt }}{% else %}A mother gently massaging her baby's head.{% endif %}" 
+              class="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQp8gJebc5ccBw5GLVYAU5RH_A-J0HNkvT9YLfho-WWxwmcH4BiavhHubvVNRpoJsLTw2WnoAZEdoYmPGYZVEx3cZJ12ta1jiRG2waJJHtvOpQuMrQPyDjJZbUeY0GiRRlHaR91Q1gCNTf6CDZl7B8GCTvdhqu6uBSaODRzeXINHHHo0PW02U_nTwVnAX32KYYOEn7p-I2Zb1B7MS5KupNa5HGKzGPG1wDT1ABg-0nXqF4hvzWRto5ztMrF6Lt7YplKvrgQyEiMcc"
+            />
+          {% endif %}
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-b-lg flex-1 flex flex-col">
+          {% if section.settings.card1_title != blank %}
+            <h3 class="font-display text-4xl text-text-light dark:text-text-dark mb-4">
+              {{ section.settings.card1_title }}
+            </h3>
+          {% endif %}
+          {% if section.settings.card1_description != blank %}
+            <p class="text-text-light dark:text-text-dark/80 flex-1">
+              {{ section.settings.card1_description }}
+            </p>
+          {% endif %}
+          {% if section.settings.card1_button_text != blank and section.settings.card1_button_url != blank %}
+            <a 
+              class="mt-6 inline-block bg-primary text-white text-center py-3 px-6 rounded-md hover:bg-opacity-90 transition-colors" 
+              href="{{ section.settings.card1_button_url }}"
+            >
+              {{ section.settings.card1_button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      
+      {% comment %} Card 2: Exquisite Ingredients {% endcomment %}
+      <div class="flex flex-col rounded-lg overflow-hidden">
+        <div class="relative pt-[110%]">
+          {% if section.settings.card2_image != blank %}
+            {{
+              section.settings.card2_image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                alt: section.settings.card2_image_alt,
+                class: 'absolute top-0 left-0 w-full h-full object-cover rounded-t-lg'
+            }}
+          {% else %}
+            <img 
+              alt="{{ section.settings.card2_image_alt | default: 'A brass pot filled with green mung beans surrounded by fresh flowers and herbs.' }}" 
+              class="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0eSmGMwr1epgCFU5zagY-vT5wNof05Q-Yrtxb-v289XemA5aWo5Lr2uSJa6FeFVZisxWaMoG2xGesgsG59eaSSruotqlPsQYoGyDXCvP8o70U1kUjT2ntdDhxybKBqKeH8Mp4VvpfEUqZY8Xe25C5Jkky6kYnxaIDDOUizl28PXK5K0BwU2QUhybIR0FY3WyyA81b0mNG98EQvMaUzsqy1AzR1fkGy8fgyViGnEIF5VXfnIYc_LgnXAxh3YVuiI8EthnjhxSJvF4"
+            />
+          {% endif %}
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-b-lg flex-1 flex flex-col">
+          {% if section.settings.card2_title != blank %}
+            <h3 class="font-display text-4xl text-text-light dark:text-text-dark mb-4">
+              {{ section.settings.card2_title }}
+            </h3>
+          {% endif %}
+          {% if section.settings.card2_description != blank %}
+            <p class="text-text-light dark:text-text-dark/80 flex-1">
+              {{ section.settings.card2_description }}
+            </p>
+          {% endif %}
+          {% if section.settings.card2_button_text != blank and section.settings.card2_button_url != blank %}
+            <a 
+              class="mt-6 inline-block bg-primary text-white text-center py-3 px-6 rounded-md hover:bg-opacity-90 transition-colors" 
+              href="{{ section.settings.card2_button_url }}"
+            >
+              {{ section.settings.card2_button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      
+      {% comment %} Card 3: Our Product Range {% endcomment %}
+      <div class="flex flex-col rounded-lg overflow-hidden">
+        <div class="relative pt-[110%]">
+          {% if section.settings.card3_image != blank %}
+            {{
+              section.settings.card3_image
+              | image_url: width: 800
+              | image_tag:
+                loading: 'lazy',
+                alt: section.settings.card3_image_alt,
+                class: 'absolute top-0 left-0 w-full h-full object-cover rounded-t-lg'
+            }}
+          {% else %}
+            <img 
+              alt="{{ section.settings.card3_image_alt | default: 'A collection of beautifully packaged baby care products on a shelf.' }}" 
+              class="absolute top-0 left-0 w-full h-full object-cover rounded-t-lg" 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWPjLw8Ld2brkZA2Hmb5st8f85VMPfMZ3pISbVIWxcio6ScoqtpL36bAgqGacMfCrhmx_ibrtV9W_ImtWbHdhGIH0Rxljk-NU-5mB5lSwD2tf1Gs_KhGKDctBPWcSlD-oyFzQtl2LFiI0KAJeeF3oNXkp7b2G8jIIUbElCqMeTGeB5LcvyAcOr_TrjNHcKf3U2w96VCdv0-Q9Db1ovhwxuxZzQRc52Btx7LFa5YBxAn4oex-nCi_CWTMqy10M2nrYTOneNL0QmXuY"
+            />
+          {% endif %}
+        </div>
+        <div class="bg-card-light dark:bg-card-dark p-8 rounded-b-lg flex-1 flex flex-col">
+          {% if section.settings.card3_title != blank %}
+            <h3 class="font-display text-4xl text-text-light dark:text-text-dark mb-4">
+              {{ section.settings.card3_title }}
+            </h3>
+          {% endif %}
+          {% if section.settings.card3_description != blank %}
+            <p class="text-text-light dark:text-text-dark/80 flex-1">
+              {{ section.settings.card3_description }}
+            </p>
+          {% endif %}
+          {% if section.settings.card3_button_text != blank and section.settings.card3_button_url != blank %}
+            <a 
+              class="mt-6 inline-block bg-primary text-white text-center py-3 px-6 rounded-md hover:bg-opacity-90 transition-colors" 
+              href="{{ section.settings.card3_button_url }}"
+            >
+              {{ section.settings.card3_button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Baby Products Section",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "cards_gap",
+      "label": "Cards Gap",
+      "min": 16,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Card 1: A Bond of Pure Love"
+    },
+    {
+      "type": "image_picker",
+      "id": "card1_image",
+      "label": "Card 1 Image"
+    },
+    {
+      "type": "text",
+      "id": "card1_image_alt",
+      "label": "Card 1 Image Alt Text",
+      "default": "A mother gently massaging her baby's head."
+    },
+    {
+      "type": "richtext",
+      "id": "card1_title",
+      "label": "Card 1 Title",
+      "default": "<p>A Bond of <em>Pure Love</em></p>"
+    },
+    {
+      "type": "textarea",
+      "id": "card1_description",
+      "label": "Card 1 Description",
+      "default": "MAATE, where mom & baby wellness unite with the magical power of ayurveda! We bring you a meticulously crafted range of premium & oh-so-natural mom & baby products."
+    },
+    {
+      "type": "text",
+      "id": "card1_button_text",
+      "label": "Card 1 Button Text",
+      "default": "Know more"
+    },
+    {
+      "type": "url",
+      "id": "card1_button_url",
+      "label": "Card 1 Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Card 2: Exquisite Ingredients"
+    },
+    {
+      "type": "image_picker",
+      "id": "card2_image",
+      "label": "Card 2 Image"
+    },
+    {
+      "type": "text",
+      "id": "card2_image_alt",
+      "label": "Card 2 Image Alt Text",
+      "default": "A brass pot filled with green mung beans surrounded by fresh flowers and herbs."
+    },
+    {
+      "type": "richtext",
+      "id": "card2_title",
+      "label": "Card 2 Title",
+      "default": "<p><em>Exquisite</em> Ingredients</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "card2_description",
+      "label": "Card 2 Description",
+      "default": "Premium formulations ensuring purity and efficacy in every drop. We source the finest natural ingredients to nurture your little one's delicate skin."
+    },
+    {
+      "type": "text",
+      "id": "card2_button_text",
+      "label": "Card 2 Button Text",
+      "default": "Our Philosophy"
+    },
+    {
+      "type": "url",
+      "id": "card2_button_url",
+      "label": "Card 2 Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Card 3: Our Product Range"
+    },
+    {
+      "type": "image_picker",
+      "id": "card3_image",
+      "label": "Card 3 Image"
+    },
+    {
+      "type": "text",
+      "id": "card3_image_alt",
+      "label": "Card 3 Image Alt Text",
+      "default": "A collection of beautifully packaged baby care products on a shelf."
+    },
+    {
+      "type": "richtext",
+      "id": "card3_title",
+      "label": "Card 3 Title",
+      "default": "<p>Our <em>Product Range</em></p>"
+    },
+    {
+      "type": "textarea",
+      "id": "card3_description",
+      "label": "Card 3 Description",
+      "default": "At Maate, we blend ancient wisdom with modern science. Experience nurturing from the luxury of nature with our range of products that are Natural, Vegan, and Sustainable."
+    },
+    {
+      "type": "text",
+      "id": "card3_button_text",
+      "label": "Card 3 Button Text",
+      "default": "View Products"
+    },
+    {
+      "type": "url",
+      "id": "card3_button_url",
+      "label": "Card 3 Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Baby Products Section"
+    }
+  ]
+}
+{% endschema %}
+

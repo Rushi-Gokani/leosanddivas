@@ -1,0 +1,46 @@
+{% if product and product.metafields.custom.a_plus_baner != blank %}
+  {% assign a_plus_banners = product.metafields.custom.a_plus_baner.value %}
+  <section
+    id="ProductAPlusBanners"
+    class="section section--page-width a-plus-banners-section"
+    data-section-type="product-a-plus-banners"
+  >
+    <div class="a-plus-banners">
+      {% for banner in a_plus_banners %}
+        <div class="a-plus-banners__item">
+          {{ banner | image_url: width: 1920 | image_tag: loading: 'lazy', alt: product.title }}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Product A+ banners",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product A+ banners"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+  .a-plus-banners-section {
+    padding-block: 32px;
+  }
+
+  .a-plus-banners {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .a-plus-banners__item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+{% endstylesheet %}

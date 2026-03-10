@@ -1,0 +1,269 @@
+{%- doc -%}
+  Renders a testimonial card
+
+  @param {object} block - The block object
+{%- enddoc -%}
+
+{% liquid
+  assign block_settings = block.settings
+  assign product = block_settings.product
+  assign rating = block_settings.rating | default: 5
+  assign card_background = block_settings.card_background | default: '#ffffff'
+  assign card_radius = block_settings.card_corner_radius | default: 16
+%}
+
+<div
+  class="testimonial-card"
+  style="
+    --card-background: {{ card_background }};
+    --card-radius: {{ card_radius }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="testimonial-card__content">
+    {% if rating > 0 %}
+      <div class="testimonial-card__rating" aria-label="Rating: {{ rating }} out of 5 stars">
+        {% for i in (1..5) %}
+          {% liquid
+            assign rating_floor = rating | floor
+            assign rating_decimal = rating | modulo: 1
+            assign next_star = rating_floor | plus: 1
+            assign is_filled = false
+            assign is_half = false
+            
+            if i <= rating_floor
+              assign is_filled = true
+            elsif i == next_star
+              if rating_decimal >= 0.25
+                if rating_decimal < 0.75
+                  assign is_half = true
+                endif
+              endif
+            endif
+          %}
+          {% if is_filled %}
+            <svg class="testimonial-card__star testimonial-card__star--filled" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          {% elsif is_half %}
+            <svg class="testimonial-card__star testimonial-card__star--half" viewBox="0 0 24 24">
+              <defs>
+                <linearGradient id="half-fill-{{ block.id }}-{{ i }}">
+                  <stop offset="50%" stop-color="currentColor"/>
+                  <stop offset="50%" stop-color="transparent" stop-opacity="1"/>
+                </linearGradient>
+              </defs>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#half-fill-{{ block.id }}-{{ i }})"/>
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+            </svg>
+          {% else %}
+            <svg class="testimonial-card__star testimonial-card__star--empty" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" opacity="0.3"/>
+            </svg>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="testimonial-card__text">
+      {{ block_settings.testimonial_text }}
+    </div>
+
+    {% if product != blank %}
+      <div class="testimonial-card__product">
+        <a href="{{ product.url }}" class="testimonial-card__product-link">
+          {% if product.featured_image %}
+            <img
+              src="{{ product.featured_image | image_url: width: 60 }}"
+              alt="{{ product.title }}"
+              class="testimonial-card__product-image"
+              loading="lazy"
+              width="60"
+              height="60"
+            >
+          {% endif %}
+          <span class="testimonial-card__product-title">{{ product.title }}</span>
+        </a>
+      </div>
+    {% endif %}
+
+    <div class="testimonial-card__footer">
+      {% if block_settings.customer_image != blank %}
+        <div class="testimonial-card__avatar">
+          <img
+            src="{{ block_settings.customer_image | image_url: width: 50 }}"
+            alt="{{ block_settings.customer_name }}"
+            class="testimonial-card__avatar-image"
+            loading="lazy"
+            width="50"
+            height="50"
+          >
+        </div>
+      {% else %}
+        <div class="testimonial-card__avatar testimonial-card__avatar--placeholder">
+          <span>{{ block_settings.customer_name | slice: 0, 1 | upcase }}</span>
+        </div>
+      {% endif %}
+      <div class="testimonial-card__author">
+        <div class="testimonial-card__name">{{ block_settings.customer_name }}</div>
+        {% if block_settings.customer_title != blank %}
+          <div class="testimonial-card__title">{{ block_settings.customer_title }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .testimonial-card {
+    min-width: 280px;
+    background: var(--card-background, #ffffff);
+    border-radius: var(--card-radius, 16px);
+    padding: var(--spacing-lg, 1.5rem);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .testimonial-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary, #000), var(--color-primary, #000) 50%, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+
+  .testimonial-card:hover::before {
+    opacity: 1;
+  }
+
+  .testimonial-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md, 1rem);
+    height: 100%;
+  }
+
+  .testimonial-card__rating {
+    display: flex;
+    gap: 2px;
+    color: rgb(221 181 119 / var(--tw-bg-opacity, 1));
+
+  }
+
+  .testimonial-card__star {
+    width: 18px;
+    height: 18px;
+  }
+
+  .testimonial-card__star--filled {
+    fill: currentColor;
+  }
+
+  .testimonial-card__star--empty {
+    opacity: 0.3;
+  }
+
+  .testimonial-card__text {
+    flex: 1;
+    font-size: var(--font-size--body, 1rem);
+    line-height: 1.6;
+    color: var(--color-foreground);
+  }
+
+  .testimonial-card__text p {
+    margin: 0;
+  }
+
+  .testimonial-card__product {
+    padding-top: var(--spacing-sm, 0.75rem);
+    border-top: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .testimonial-card__product-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.75rem);
+    text-decoration: none;
+    color: var(--color-foreground);
+    transition: opacity 0.2s ease;
+  }
+
+  .testimonial-card__product-link:hover {
+    opacity: 0.7;
+  }
+
+  .testimonial-card__product-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .testimonial-card__product-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .testimonial-card__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.75rem);
+    padding-top: var(--spacing-sm, 0.75rem);
+    border-top: 1px solid rgba(var(--color-foreground-rgb), 0.1);
+  }
+
+  .testimonial-card__avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .testimonial-card__avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .testimonial-card__avatar--placeholder {
+    background:  rgb(221 181 119 / var(--tw-bg-opacity, 1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+
+  .testimonial-card__author {
+    flex: 1;
+  }
+
+  .testimonial-card__name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    margin-bottom: 2px;
+  }
+
+  .testimonial-card__title {
+    font-size: 0.8125rem;
+    opacity: 0.7;
+  }
+
+{% endstylesheet %}
+

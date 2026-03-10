@@ -1,0 +1,155 @@
+<div class="banner-wave-wrapper">
+  <div class="banner-wave-container">
+    {% if section.settings.wave_image %}
+      <img
+        src="{{ section.settings.wave_image | image_url: width: 2000 }}"
+        alt="Wavy Design"
+        class="banner-wave"
+        width="{{ section.settings.wave_image.width }}"
+        height="{{ section.settings.wave_image.height }}"
+        loading="lazy"
+        decoding="async"
+      >
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .banner-wave-wrapper {
+    position: relative;
+    margin-top: -200px;
+    margin-bottom: 0;
+    z-index: 10;
+    height: 200px;
+    overflow: visible;
+  }
+
+  .banner-wave-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .banner-wave {
+    width: 100%;
+    display: block;
+    margin-top: -1.35%;
+    height: auto;
+    position: relative;
+  }
+
+  /* Media Queries */
+
+  /* Tablet adjustments (between 769px and 1024px) */
+  @media (min-width: 769px) {
+    .banner-wave-wrapper {
+      margin-top: -200px;
+      height: 200px;
+    }
+
+    .banner-wave-container {
+      margin-top: -35px; /* Adjust for tablet screens */
+    }
+
+    .banner-wave {
+      width: 100%;
+    }
+  }
+
+  /* Mobile adjustments (up to 768px) */
+  @media (max-width: 768px) {
+    .banner-wave-wrapper {
+      margin-top: -150px;
+      height: 150px;
+    }
+
+    .banner-wave-container {
+      margin-top: -15px; /* Slight adjustment for mobile */
+    }
+
+    .banner-wave {
+      width: 100%;
+    }
+  }
+
+  /* Extra small screens (up to 480px) */
+  @media (max-width: 480px) {
+    .banner-wave-wrapper {
+      margin-top: -120px;
+      height: 120px;
+    }
+
+    .banner-wave-container {
+      margin-top: -5px; /* More precise fix for very small devices */
+    }
+
+    .banner-wave {
+      width: 100%;
+      margin-top: -3%; /* Prevents awkward cutoffs */
+    }
+  }
+
+  /* Medium devices (tablets, 768px to 1023px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .banner-wave-wrapper {
+      margin-top: -180px;
+      height: 180px;
+    }
+
+    .banner-wave-container {
+      margin-top: -15px; /* Slight adjustment for mobile */
+    }
+
+    .banner-wave {
+      width: 100%;
+      margin-top: -2%;
+    }
+  }
+
+  /* Large devices (laptops/desktops, 1024px to 1279px) */
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    .banner-wave {
+      width: 100%;
+      margin-top: -1.1%;
+    }
+  }
+
+  /* Extra large devices (large desktops, 1280px and above) */
+  @media (min-width: 1280px) {
+    .banner-wave {
+      width: 100%;
+      margin-top: -1.1%;
+    }
+  }
+
+  @media (min-width: 1600px) {
+    .banner-wave {
+      width: 100%;
+      display: block;
+      margin-top: -2%;
+      height: auto;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Banner Wavy",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "wave_image",
+      "label": "Upload Wavy Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner Wavy",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

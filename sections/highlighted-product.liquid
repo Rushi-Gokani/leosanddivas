@@ -1,0 +1,516 @@
+{% comment %}
+  Highlighted Product Section
+  Left side: Horizontally scrolling product cards
+  Right side: Content (heading, description, button)
+{% endcomment %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<div
+  class="highlighted-product-section section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="highlighted-product-wrapper">
+    {% comment %} Left Side - Product Card Gallery {% endcomment %}
+    <div class="highlighted-product__gallery">
+      <div class="highlighted-product__navigation">
+        <button
+          type="button"
+          class="highlighted-product__nav-button highlighted-product__nav-button--left"
+          aria-label="Scroll left"
+          data-direction="left"
+        >
+          <span class="svg-wrapper icon-arrow icon-arrow--left">
+            {{ 'icon-chevron-left.svg' | inline_asset_content }}
+          </span>
+        </button>
+        <button
+          type="button"
+          class="highlighted-product__nav-button highlighted-product__nav-button--right"
+          aria-label="Scroll right"
+          data-direction="right"
+        >
+          <span class="svg-wrapper icon-arrow icon-arrow--right">
+            {{ 'icon-chevron-right.svg' | inline_asset_content }}
+          </span>
+        </button>
+      </div>
+      <scroll-hint class="highlighted-product__scroll-container" data-scroll-container>
+        <div class="highlighted-product__product-list">
+          {% liquid
+            assign selected_product = section.settings.product
+          %}
+
+          {% if selected_product != blank %}
+            {% liquid
+              assign media_images = selected_product.media | where: 'media_type', 'image'
+            %}
+
+            {% if media_images.size == 0 %}
+              {% assign media_images = selected_product.images %}
+            {% endif %}
+
+            {% for media in media_images limit: 6 %}
+              <div class="highlighted-product__product-item">
+                <a
+                  class="highlighted-product__product-media"
+                  href="{{ selected_product.url }}"
+                  aria-label="{{ selected_product.title }}"
+                >
+                  {% if media != blank %}
+                    {{ media | image_url: width: 1400 | image_tag: class: 'highlighted-product__image', loading: 'lazy', alt: selected_product.title }}
+                  {% else %}
+                    {{ 'image' | placeholder_svg_tag: 'highlighted-product__placeholder' }}
+                  {% endif %}
+                </a>
+              </div>
+            {% endfor %}
+          {% else %}
+            {% for i in (1..2) %}
+              <div class="highlighted-product__product-item">
+                <div class="highlighted-product__product-media">
+                  {{ 'image' | placeholder_svg_tag: 'highlighted-product__placeholder' }}
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </scroll-hint>
+    </div>
+
+    {% comment %} Right Side - Content {% endcomment %}
+    <div class="highlighted-product__content">
+      <div class="highlighted-product__content-inner">
+        {% if section.settings.heading != blank %}
+          <h2 class="highlighted-product__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="highlighted-product__description">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.button_text != blank and section.settings.button_url != blank %}
+          <a
+            href="{{ section.settings.button_url }}"
+            class="highlighted-product__button button"
+          >
+            {{ section.settings.button_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .highlighted-product-section {
+    padding: var(--page-margin);
+  }
+
+  .highlighted-product-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--page-margin);
+    max-width: var(--page-width);
+    margin: 0 auto;
+
+    @media screen and (min-width: 750px) {
+      grid-template-columns: 1fr 1fr;
+      gap: calc(2 * var(--page-margin));
+    }
+  }
+
+  .highlighted-product__gallery {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 48px; /* space for arrows under the images */
+  }
+
+  .highlighted-product__navigation {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    width: auto;
+    padding: 0;
+    pointer-events: none;
+  }
+
+  .highlighted-product__nav-button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    appearance: none;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &[disabled] {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  .highlighted-product__nav-button .svg-wrapper {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .highlighted-product__scroll-container {
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    @media (prefers-reduced-motion: reduce) {
+      scroll-behavior: auto;
+    }
+
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .highlighted-product__product-list {
+    display: flex;
+    flex-direction: row;
+    gap: var(--page-margin);
+    padding: 0;
+  }
+
+  .highlighted-product__product-item {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    width: calc((100% - var(--page-margin)) / 2);
+    min-width: 320px;
+    max-width: 520px;
+
+    @media screen and (min-width: 750px) {
+      width: calc((100% - var(--page-margin)) / 2);
+      min-width: 360px;
+    }
+  }
+
+  .highlighted-product__product-media {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f7f4f2;
+  }
+
+  .highlighted-product__image,
+  .highlighted-product__placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .highlighted-product__image {
+    object-fit: cover;
+    aspect-ratio: 3 / 4;
+  }
+
+  .highlighted-product__placeholder {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Desktop: Show 2 product cards at a time */
+  @media screen and (min-width: 750px) {
+    .highlighted-product-wrapper {
+      align-items: start;
+    }
+
+    .highlighted-product__gallery {
+      position: sticky;
+      top: var(--page-margin);
+      height: fit-content;
+    }
+
+    .highlighted-product__scroll-container {
+      width: 100%;
+    }
+
+    .highlighted-product__product-item {
+      width: calc((100% - var(--page-margin)) / 2);
+    }
+  }
+
+  /* Mobile: Show 1.5 product cards to hint at scrolling */
+  @media screen and (max-width: 749px) {
+    .highlighted-product__product-item {
+      width: calc((100vw - 2 * var(--page-margin) - 20px) * 0.85);
+      min-width: 260px;
+    }
+
+    /* Hide navigation on mobile - users can scroll naturally */
+    .highlighted-product__navigation {
+      display: none;
+    }
+  }
+
+  .highlighted-product__content {
+    display: flex;
+    align-items: center;
+    padding: var(--page-margin) 0;
+  }
+
+  .highlighted-product__content-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--page-margin);
+  }
+
+  .highlighted-product__heading {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.2;
+    margin: 0;
+    font-weight: var(--font-weight-bold, 700);
+    letter-spacing: 2.4px;
+  }
+
+  .highlighted-product__description {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: rgba(var(--color-foreground), 0.8);
+  }
+
+  .highlighted-product__button {
+    align-self: flex-start;
+    margin-top: calc(var(--page-margin) / 2);
+  }
+
+  /* Ensure proper spacing on mobile */
+  @media screen and (max-width: 749px) {
+    .highlighted-product-wrapper {
+      gap: calc(1.5 * var(--page-margin));
+    }
+
+    .highlighted-product__content {
+      padding: 0;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (function() {
+    const section = document.querySelector('.highlighted-product-section');
+    if (!section) return;
+
+    const scrollContainer = section.querySelector('[data-scroll-container]');
+    const leftButton = section.querySelector('.highlighted-product__nav-button--left');
+    const rightButton = section.querySelector('.highlighted-product__nav-button--right');
+    const navWrapper = section.querySelector('.highlighted-product__navigation');
+
+    if (!scrollContainer || !leftButton || !rightButton) return;
+
+    function updateButtonStates() {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
+      const isAtLeft = scrollLeft <= 10;
+      const isAtRight = scrollLeft + clientWidth >= scrollWidth - 10;
+
+      leftButton.disabled = isAtLeft;
+      rightButton.disabled = isAtRight;
+    }
+
+    function scrollProducts(direction) {
+      const productItems = scrollContainer.querySelectorAll('.highlighted-product__product-item');
+      if (productItems.length === 0) return;
+
+      // Calculate scroll amount: one product card width + gap
+      const firstProduct = productItems[0];
+      if (!firstProduct) return;
+
+      const productWidth = firstProduct.offsetWidth;
+      const productList = scrollContainer.querySelector('.highlighted-product__product-list');
+      const gap = parseInt(getComputedStyle(productList).gap) || 0;
+      const scrollAmount = productWidth + gap;
+
+      const currentScroll = scrollContainer.scrollLeft;
+      const targetScroll = direction === 'right' 
+        ? currentScroll + scrollAmount 
+        : Math.max(0, currentScroll - scrollAmount);
+
+      scrollContainer.scrollTo({
+        left: targetScroll,
+        behavior: 'smooth'
+      });
+    }
+
+    // Add click handlers
+    leftButton.addEventListener('click', () => scrollProducts('left'));
+    rightButton.addEventListener('click', () => scrollProducts('right'));
+
+    // Update button states on scroll
+    scrollContainer.addEventListener('scroll', updateButtonStates);
+
+    // Update button states on resize
+    const resizeObserver = new ResizeObserver(() => {
+      updateButtonStates();
+    });
+    resizeObserver.observe(scrollContainer);
+
+    // Hide navigation if there is only one item
+    const initialItems = scrollContainer.querySelectorAll('.highlighted-product__product-item');
+    if (initialItems.length <= 1 && navWrapper) {
+      navWrapper.style.display = 'none';
+    } else {
+      updateButtonStates();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Highlighted Product",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product",
+      "info": "Select the product to feature in this section."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Baby Outfits & Sets"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Dress your little one in our adorable Baby Outfits & Sets, crafted with soft fabrics for maximum comfort and style. From snuggly onesies to charming two-piece sets, each ensemble is designed to keep your baby cozy and looking oh-so-adorable.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-start",
+      "label": "Left Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding-inline-end",
+      "label": "Right Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Highlighted Product",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
+

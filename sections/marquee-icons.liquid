@@ -1,0 +1,492 @@
+<script
+  src="{{ 'marquee.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+{% assign gap_between_elements = section.settings.gap_between_elements %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+{%- comment -%} Desktop: Marquee, Tablet/Mobile: Static Grid {%- endcomment -%}
+<section
+  class="marquee-icons-section color-{{ section.settings.color_scheme }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_block_start | default: 24 }}px;
+    --section-padding-bottom: {{ section.settings.padding_block_end | default: 24 }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_block_start_mobile | default: 16 }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_block_end_mobile | default: 16 }}px;
+    --icon-width: {{ section.settings.icon_width | default: 60 }}px;
+    --icon-height: {{ section.settings.icon_height | default: 50 }}px;
+    --icon-width-mobile: {{ section.settings.icon_width_mobile | default: 50 }}px;
+    --icon-height-mobile: {{ section.settings.icon_height_mobile | default: 40 }}px;
+    --marquee-gap: {{ gap_between_elements | default: 24 }}px;
+  "
+>
+  <div class="marquee-icons-container">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <header class="marquee-icons-header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="marquee-icons-heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="marquee-icons-subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- comment -%} Desktop Marquee (hidden on tablet/mobile) {%- endcomment -%}
+    <marquee-component
+      class="marquee-desktop"
+      style="--marquee-direction: {{ section.settings.movement_direction }};"
+      data-speed-factor="20"
+      data-movement-direction="{{ section.settings.movement_direction }}"
+    >
+      <div class="marquee__wrapper" ref="wrapper">
+        <div class="marquee__content" ref="content">
+          <div class="marquee__repeated-items">
+            {%- for block in section.blocks -%}
+              <div class="marquee-icons-entry" ref="marqueeItems" {{ block.shopify_attributes }}>
+                <div class="marquee-icons-item">
+                  {%- if block.settings.image != blank -%}
+                    {%- assign marquee_alt = block.settings.alt | default: block.settings.caption | escape -%}
+                    {{ block.settings.image | image_url: width: 400 | image_tag: alt: marquee_alt, loading: 'lazy' }}
+                  {%- endif -%}
+                </div>
+                {%- if block.settings.caption != blank -%}
+                  <div class="marquee-icons-caption">{{ block.settings.caption }}</div>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </marquee-component>
+
+    {%- comment -%} Tablet/Mobile Static Grid (hidden on desktop) {%- endcomment -%}
+    <div class="icons-grid-mobile">
+      {%- for block in section.blocks -%}
+        <div class="marquee-icons-entry" {{ block.shopify_attributes }}>
+          <div class="marquee-icons-item">
+            {%- if block.settings.image != blank -%}
+              {%- assign marquee_alt = block.settings.alt | default: block.settings.caption | escape -%}
+              {{ block.settings.image | image_url: width: 400 | image_tag: alt: marquee_alt, loading: 'lazy' }}
+            {%- endif -%}
+          </div>
+          {%- if block.settings.caption != blank -%}
+            <div class="marquee-icons-caption">{{ block.settings.caption }}</div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ========================================
+     BASE STYLES
+     ======================================== */
+  .marquee-icons-section {
+    padding-top: var(--section-padding-top);
+    padding-bottom: var(--section-padding-bottom);
+    width: 100%;
+    position: relative;
+  }
+
+  .marquee-icons-container {
+    max-width: var(--page-width, 1200px);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .marquee-icons-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+  }
+
+  .marquee-icons-heading {
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    line-height: 1.3;
+    margin: 0 0 1rem 0;
+    letter-spacing: 0.1em;
+  }
+
+  .marquee-icons-subheading {
+    font-size: clamp(0.75rem, 1.2vw, 0.875rem);
+    font-weight: 500;
+    color: {{ section.settings.subheading_color | default: 'inherit' }};
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.8;
+  }
+
+  .marquee-icons-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .marquee-icons-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-width);
+    height: var(--icon-height);
+  }
+
+  .marquee-icons-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: {{ section.settings.image_filter | default: 'none' }};
+  }
+
+  .marquee-icons-caption {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: {{ section.settings.caption_color | default: 'inherit' }};
+    line-height: 1.4;
+    max-width: 120px;
+    word-wrap: break-word;
+  }
+
+  /* ========================================
+     DESKTOP (990px+) - MARQUEE
+     ======================================== */
+  .icons-grid-mobile {
+    display: none;
+  }
+
+  .marquee-desktop {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  }
+
+  .marquee__wrapper {
+    display: flex;
+    gap: var(--marquee-gap);
+    width: max-content;
+    will-change: transform;
+  }
+
+  .marquee__content {
+    display: flex;
+    gap: var(--marquee-gap);
+    width: max-content;
+  }
+
+  .marquee__repeated-items {
+    display: flex;
+    gap: var(--marquee-gap);
+    align-items: center;
+  }
+
+  @keyframes marquee-motion {
+    to {
+      transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    marquee-component:not([data-disabled]) .marquee__wrapper {
+      animation: marquee-motion var(--marquee-speed, 30s) linear infinite var(--marquee-direction, normal);
+    }
+  }
+
+  /* ========================================
+     TABLET & MOBILE (< 990px) - STATIC GRID
+     ======================================== */
+  @media screen and (max-width: 989px) {
+    .marquee-desktop {
+      display: none !important;
+    }
+
+    .icons-grid-mobile {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem 1rem;
+    }
+
+    .icons-grid-mobile .marquee-icons-entry {
+      flex: 0 0 calc(20% - 1rem);
+      min-width: 80px;
+    }
+
+    .icons-grid-mobile .marquee-icons-item {
+      width: var(--icon-width-mobile);
+      height: var(--icon-height-mobile);
+    }
+
+    .icons-grid-mobile .marquee-icons-caption {
+      font-size: 0.65rem;
+      max-width: 100px;
+    }
+  }
+
+  /* ========================================
+     MOBILE (< 750px)
+     ======================================== */
+  @media screen and (max-width: 749px) {
+    .marquee-icons-section {
+      padding-top: var(--section-padding-top-mobile);
+      padding-bottom: var(--section-padding-bottom-mobile);
+    }
+
+    .marquee-icons-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .icons-grid-mobile {
+      gap: 1.25rem 0.75rem;
+    }
+
+    .icons-grid-mobile .marquee-icons-entry {
+      flex: 0 0 calc(33.333% - 0.75rem);
+      min-width: 70px;
+    }
+
+    .icons-grid-mobile .marquee-icons-caption {
+      font-size: 0.6rem;
+      max-width: 80px;
+    }
+  }
+
+  /* ========================================
+     SMALL MOBILE (< 480px)
+     ======================================== */
+  @media screen and (max-width: 479px) {
+    .icons-grid-mobile .marquee-icons-entry {
+      flex: 0 0 calc(50% - 0.5rem);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Marquee Icons",
+  "tag": "section",
+  "class": "section-marquee-icons",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "movement_direction",
+      "label": "t:settings.motion_direction",
+      "options": [
+        { "value": "reverse", "label": "t:options.forward" },
+        { "value": "normal", "label": "t:options.reverse" }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "range",
+      "id": "gap_between_elements",
+      "label": "t:settings.gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Icon Settings"
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "label": "Icon Width (px)",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "icon_height",
+      "label": "Icon Height (px)",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "icon_width_mobile",
+      "label": "Icon Width Mobile (px)",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "icon_height_mobile",
+      "label": "Icon Height Mobile (px)",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "caption_color",
+      "label": "Caption color",
+      "default": "#000000"
+    },
+    {
+      "type": "select",
+      "id": "image_filter",
+      "label": "Image filter",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "grayscale(100%)",
+          "label": "Grayscale"
+        },
+        {
+          "value": "brightness(0.8)",
+          "label": "Darker"
+        },
+        {
+          "value": "brightness(1.2)",
+          "label": "Brighter"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_block_start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_block_end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_block_start_mobile",
+      "label": "Padding top (Mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_block_end_mobile",
+      "label": "Padding bottom (Mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text",
+          "info": "Optional: Image alt text for accessibility"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption",
+          "info": "Optional: Text below the icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Icons",
+      "blocks": [
+        { "type": "icon" },
+        { "type": "icon" },
+        { "type": "icon" },
+        { "type": "icon" },
+        { "type": "icon" }
+      ]
+    }
+  ]
+}
+{% endschema %}
