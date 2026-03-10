@@ -1,0 +1,666 @@
+{%- style -%}
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:ital,wght@0,300;0,400;1,300&display=swap');
+
+  .journal-section {
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.bg_image != blank %}
+    background-image: url('{{ section.settings.bg_image | img_url: 'master' }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    {% endif %}
+    color: {{ section.settings.text_color }};
+    padding: 80px 20px 60px 20px;
+    font-family: 'Playfair Display', serif;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .journal-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(#d3c6bc 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .journal-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .top-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .top-divider .line {
+    height: 1px;
+    background-color: {{ section.settings.text_color }};
+    opacity: 0.2;
+    flex: 1;
+    max-width: 300px;
+  }
+
+  .top-divider .diamond {
+    width: 8px;
+    height: 8px;
+    background-color: #d1b48b; /* gold-ish highlight */
+    transform: rotate(45deg);
+    margin: 0 15px;
+    opacity: 0.8;
+  }
+
+  .journal-header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .journal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 400;
+    margin: 0 20px;
+    color: {{ section.settings.text_color }};
+    letter-spacing: 0.5px;
+  }
+
+  .journal-search-container {
+    max-width: 500px;
+    margin: 0 auto 50px auto;
+  }
+
+  .journal-search-form {
+    display: flex;
+    align-items: center;
+    background-color: #fdfaf6;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+    padding: 10px 15px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  }
+
+  .journal-search-form input[type="text"] {
+    border: none;
+    background: transparent;
+    flex: 1;
+    padding: 5px 10px;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    color: {{ section.settings.text_color }};
+    outline: none;
+  }
+  
+  .journal-search-form input::placeholder {
+    color: {{ section.settings.text_color | color_modify: 'alpha', 0.5 }};
+  }
+
+  .search-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    opacity: 0.6;
+  }
+
+  .journal-cards-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-bottom: 70px;
+    justify-content: center;
+  }
+
+  .journal-card {
+    flex: 1 1 320px;
+    max-width: 340px;
+    background-color: #fcf9f2;
+    border-radius: 6px;
+    padding: 25px 20px 30px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px solid #ebe2d3;
+  }
+
+  .card-top-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin: 0 0 20px 0;
+    color: {{ section.settings.text_color }};
+  }
+
+  .journal-card.style-italic .card-top-title {
+    font-style: italic;
+  }
+
+  .card-image-wrapper {
+    width: 100%;
+    aspect-ratio: 1.15 / 1;
+    overflow: hidden;
+    margin-bottom: 25px;
+  }
+
+  .card-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-quote-wrapper {
+    width: 100%;
+    aspect-ratio: 1.15 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    padding: 30px;
+    background-color: #f0e4cd;
+  }
+
+  .card-quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: {{ section.settings.text_color }};
+    line-height: 1.4;
+  }
+
+  .card-quote-text p {
+    margin: 0;
+  }
+
+  .card-bottom-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    color: {{ section.settings.text_color }};
+    flex-grow: 1;
+  }
+
+  .card-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-family: 'Lato', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: {{ section.settings.text_color }};
+    border: 1px solid rgba(0,0,0,0.15);
+    background: transparent;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+    margin: 0 auto;
+    letter-spacing: 0.5px;
+  }
+
+  .card-btn:hover {
+    background: rgba(0,0,0,0.03);
+  }
+
+  .card-btn svg {
+    width: 12px;
+    height: 12px;
+    margin-left: 8px;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  /* Footer Columns */
+  .journal-footer-cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+    margin-top: 20px;
+    padding-top: 50px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    justify-content: center;
+    position: relative;
+  }
+  
+  /* Vertical divider on desktop */
+  @media (min-width: 769px) {
+    .journal-footer-cols::after {
+      content: '';
+      position: absolute;
+      top: 50px;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: rgba(0,0,0,0.08);
+      transform: translateX(-50%);
+    }
+  }
+
+  .journal-col {
+    flex: 1 1 350px;
+    max-width: 450px;
+  }
+
+  .col-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    text-align: center;
+    margin: 0 0 15px 0;
+    color: {{ section.settings.text_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .col-title .bow-icon {
+    width: 14px;
+    height: 14px;
+    opacity: 0.6;
+  }
+  
+  .col-title .bow-left { margin-right: 15px; }
+  .col-title .bow-right { margin-left: 15px; }
+
+  .journal-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .journal-list li {
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .journal-list a {
+    text-decoration: none;
+    color: {{ section.settings.text_color }};
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.3s ease;
+    padding: 12px 0 12px 40px; /* Add matching padding to align properly with title */
+    position: relative;
+  }
+
+  .journal-list a:hover {
+    opacity: 0.7;
+  }
+
+  .journal-list a .heart-icon {
+    font-size: 10px;
+    color: #cda899;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  @media (max-width: 768px) {
+    .journal-title {
+      font-size: 32px;
+    }
+    .top-divider .line {
+      max-width: 150px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="journal-section">
+  <div class="journal-container">
+    
+    <div class="top-divider">
+      <div class="line"></div>
+      <div class="diamond"></div>
+      <div class="line"></div>
+    </div>
+
+    <div class="journal-header">
+      <h2 class="journal-title">{{ section.settings.main_heading }}</h2>
+    </div>
+
+    <div class="journal-search-container">
+      <form action="{{ routes.search_url }}" method="get" class="journal-search-form">
+        <input type="hidden" name="type" value="article">
+        <div class="search-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <input type="text" name="q" placeholder="{{ section.settings.search_placeholder }}" value="{{ search.terms | escape }}">
+      </form>
+    </div>
+
+    <div class="journal-cards-wrapper">
+      {% assign blog_for_cards = blogs[section.settings.main_blog] %}
+      
+      {% if section.settings.dynamic_cards and blog_for_cards != blank and blog_for_cards.articles.size > 0 %}
+        <!-- Dynamic Cards from Blog -->
+        {% for article in blog_for_cards.articles limit: 3 %}
+          <div class="journal-card" {{ block.shopify_attributes }}>
+            <h3 class="card-top-title">{{ article.title }}</h3>
+            
+            {% if article.image %}
+               <div class="card-image-wrapper">
+                 <img src="{{ article.image | img_url: '600x600', crop: 'center' }}" alt="{{ article.title | escape }}" loading="lazy">
+               </div>
+               <div class="card-bottom-text">
+                 {% if article.excerpt != blank %}
+                   {{ article.excerpt | strip_html | truncatewords: 15 }}
+                 {% else %}
+                   {{ article.content | strip_html | truncatewords: 15 }}
+                 {% endif %}
+               </div>
+            {% else %}
+               <!-- Render as Quote if no image -->
+               <div class="card-quote-wrapper">
+                  <div class="card-quote-text"><p>“{{ article.excerpt | default: article.content | strip_html | truncatewords: 10 }}”</p></div>
+               </div>
+               <div class="card-bottom-text">Thought for the day</div>
+            {% endif %}
+
+            <a href="{{ article.url }}" class="card-btn">
+              Read Article
+              <!-- dropdown arrow icon -->
+              <svg viewBox="0 0 24 24" fill="none" class="btn-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </a>
+          </div>
+        {% endfor %}
+      
+      {% else %}
+        <!-- Manual Blocks -->
+        {% for block in section.blocks %}
+          {% if block.type == 'card' %}
+            <div class="journal-card {% if block.settings.italic_title %}style-italic{% endif %}" {{ block.shopify_attributes }}>
+              
+              {% if block.settings.article != blank %}
+                <!-- Populated from selected article in block -->
+                {% assign b_article = articles[block.settings.article] %}
+                <h3 class="card-top-title">{{ b_article.title }}</h3>
+                
+                {% if block.settings.use_quote %}
+                   <div class="card-quote-wrapper">
+                      <div class="card-quote-text">{{ block.settings.quote_text }}</div>
+                   </div>
+                {% else %}
+                   <div class="card-image-wrapper">
+                     {% if b_article.image %}
+                       <img src="{{ b_article.image | img_url: '600x600', crop: 'center' }}" alt="{{ b_article.title }}" loading="lazy">
+                     {% elsif block.settings.image %}
+                       <img src="{{ block.settings.image | img_url: '600x600', crop: 'center' }}" alt="{{ b_article.title }}" loading="lazy">
+                     {% else %}
+                       {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                     {% endif %}
+                   </div>
+                {% endif %}
+
+                <div class="card-bottom-text">
+                  {% if b_article.excerpt != blank %}
+                    {{ b_article.excerpt | strip_html | truncatewords: 15 }}
+                  {% else %}
+                    {{ b_article.content | strip_html | truncatewords: 15 }}
+                  {% endif %}
+                </div>
+                
+                <a href="{{ b_article.url }}" class="card-btn">
+                  {{ block.settings.button_label | default: "Read More" }}
+                  <svg viewBox="0 0 24 24" fill="none" class="btn-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </a>
+                
+              {% else %}
+                <!-- Completely manual Fallback -->
+                <h3 class="card-top-title">{{ block.settings.title }}</h3>
+                
+                {% if block.settings.use_quote %}
+                   <div class="card-quote-wrapper">
+                      <div class="card-quote-text">{{ block.settings.quote_text }}</div>
+                   </div>
+                {% else %}
+                   <div class="card-image-wrapper">
+                     {% if block.settings.image %}
+                       <img src="{{ block.settings.image | img_url: '600x600', crop: 'center' }}" alt="{{ block.settings.title }}" loading="lazy">
+                     {% else %}
+                       {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                     {% endif %}
+                   </div>
+                {% endif %}
+
+                <div class="card-bottom-text">{{ block.settings.bottom_text }}</div>
+                
+                {% if block.settings.button_label != blank %}
+                  <a href="{{ block.settings.button_link }}" class="card-btn">
+                    {{ block.settings.button_label }}
+                    <svg viewBox="0 0 24 24" fill="none" class="btn-arrow"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </a>
+                {% endif %}
+              {% endif %}
+
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div class="journal-footer-cols">
+      <!-- Dynamic Blog Links -->
+      <div class="journal-col">
+        <h4 class="col-title">
+          <svg class="bow-icon bow-left" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12C9 9 3 7 3 12C3 17 9 15 12 12ZM12 12C15 9 21 7 21 12C21 17 15 15 12 12Z" fill="#cda899"/></svg>
+          {{ section.settings.dynamic_list_title }}
+        </h4>
+        <ul class="journal-list">
+          {% assign blog = blogs[section.settings.main_blog] %}
+          {% if blog.articles.size > 0 %}
+            {% for article in blog.articles limit: 3 %}
+              <li><a href="{{ article.url }}"><span class="heart-icon">♥</span>{{ article.title }}</a></li>
+            {% endfor %}
+          {% else %}
+            <li><a href="#"><span class="heart-icon">♥</span>Creating a Calming Bedtime Routine</a></li>
+            <li><a href="#"><span class="heart-icon">♥</span>Finding Joy in Little Moments</a></li>
+            <li><a href="#"><span class="heart-icon">♥</span>Self-Care Tips for Moms</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Footer Menu Links -->
+      <div class="journal-col">
+        <h4 class="col-title">
+          {{ section.settings.menu_list_title }}
+          <svg class="bow-icon bow-right" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 12C9 9 3 7 3 12C3 17 9 15 12 12ZM12 12C15 9 21 7 21 12C21 17 15 15 12 12Z" fill="#cda899"/></svg>
+        </h4>
+        <ul class="journal-list">
+          {% assign menu = linklists[section.settings.footer_menu] %}
+          {% if menu.links.size > 0 %}
+            {% for link in menu.links limit: 3 %}
+              <li><a href="{{ link.url }}"><span class="heart-icon">♥</span>{{ link.title }}</a></li>
+            {% endfor %}
+          {% else %}
+            <li><a href="#"><span class="heart-icon">♥</span>Balancing Love & Discipline</a></li>
+            <li><a href="#"><span class="heart-icon">♥</span>Nutrition Tips for Moms</a></li>
+            <li><a href="#"><span class="heart-icon">♥</span>Manifesting Your Dreams</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Journal",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f4ede3"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#5a3a31"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Main Heading",
+      "default": "Welcome to My Journal"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search Placeholder",
+      "default": "Search thoughts, tips..."
+    },
+    {
+      "type": "header",
+      "content": "Dynamic Lists"
+    },
+    {
+      "type": "checkbox",
+      "id": "dynamic_cards",
+      "label": "Populate Cards Dynamically from Blog",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "dynamic_list_title",
+      "label": "Latest Entries Title",
+      "default": "Latest Entries"
+    },
+    {
+      "type": "blog",
+      "id": "main_blog",
+      "label": "Select Blog (For Cards & Latest Entries)"
+    },
+    {
+      "type": "text",
+      "id": "menu_list_title",
+      "label": "Favourite Reads Title",
+      "default": "Debina's Favourite Reads"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Favourite Reads Menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Journal Card",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Select Article (Overrides manual content)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Top Title",
+          "default": "Category"
+        },
+        {
+          "type": "checkbox",
+          "id": "italic_title",
+          "label": "Use Italic Title Font",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "use_quote",
+          "label": "Use Quote Design",
+          "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "richtext",
+          "id": "quote_text",
+          "label": "Quote Text (If used)",
+          "default": "<p>“ Your quote here ”</p>"
+        },
+        {
+          "type": "text",
+          "id": "bottom_text",
+          "label": "Bottom Text",
+          "default": "Short description about the topics."
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Read More"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Journal",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Parenting Tips",
+            "bottom_text": "Real, practical advice from my everyday life.",
+            "button_label": "Explore Parenting Tips"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Thought for the Day.",
+            "italic_title": true,
+            "use_quote": true,
+            "quote_text": "<p>“ Believe in the magic of new beginnings. ”</p>",
+            "bottom_text": "Daily inspiration for a positive life.",
+            "button_label": "Read Today's Thought"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "To-Be Moms",
+            "bottom_text": "Guidance for your beautiful journey.",
+            "button_label": "For To-Be Moms"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

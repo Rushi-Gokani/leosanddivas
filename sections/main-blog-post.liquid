@@ -2,60 +2,93 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div class="section color-{{ section.settings.color_scheme }}">
-  <div
-    class="
-      spacing-style
-      layout-panel-flex
-      layout-panel-flex--column
-      section-content-wrapper
-      mobile-column
-    "
-    style="
-      {% render 'layout-panel-style', settings: section.settings %}
-      {% render 'spacing-style', settings: section.settings %}
-    "
-  >
-    <header>
-      {%- content_for 'block', id: 'blog-post-title', type: 'text' %}
-      {%- content_for 'block', id: 'blog-post-details', type: '_blog-post-info-text' %}
+  <div class="custom-blog-container" style="
+    {% render 'layout-panel-style', settings: section.settings %}
+    {% render 'spacing-style', settings: section.settings %}
+  ">
+    <header class="custom-blog-header">
+      <div class="custom-blog-breadcrumbs">
+        {% if article.tags.size > 0 %}
+          <span class="custom-blog-tag">{{ article.tags.first | upcase }}</span>
+        {% else %}
+          <span class="custom-blog-tag">SKIN EDUCATION</span>
+        {% endif %}
+      </div>
+      <h1 class="h1 custom-blog-title">{{ article.title }}</h1>
+      <div class="custom-blog-date">
+        {{ article.published_at | time_tag: format: 'date' }}
+      </div>
+      
+      {% render 'blog-share-popup', article: article %}
     </header>
 
-    {%- if article.image -%}
-      {%- content_for 'block', id: 'blog-post-image', type: '_blog-post-featured-image' %}
-    {%- endif -%}
-    {%- content_for 'block', id: 'blog-post-content', type: '_blog-post-content' %}
+    <div class="custom-blog-columns">
+      <div class="custom-blog-left-col">
 
-    {% comment %} Dynamic area for @app blocks only, at the bottom {% endcomment %}
-    {% content_for 'blocks' %}
-
-    {% if blog.comments_enabled? %}
-      <div class="blog-post-comments-container">
-        <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
-
-        <div class="blog-post-comments">
-          {% paginate article.comments by 10 %}
-            {% for comment in article.comments %}
-              <div class="blog-post-comment">
-                {{ comment.content }}
-                <div class="blog-post-comment__author">
-                  <span class="blog-post-comment__author-name">{{- comment.author -}}</span>
-                  <span>{{- 'blogs.article.comment_author_separator' | t -}}</span>
-                  <span class="blog-post-comment__date">
-                    {{- comment.created_at | time_tag: format: 'date' -}}
-                  </span>
-                </div>
-              </div>
-            {% endfor %}
-
-            <div class="blog-post-comments-pagination">
-              {{- paginate | default_pagination -}}
-            </div>
-          {% endpaginate %}
+      {%- if article.image -%}
+        <div class="custom-blog-image-wrapper">
+          <img src="{{ article.image | img_url: '1024x' }}" alt="{{ article.image.alt | escape }}" loading="lazy" class="custom-blog-main-image">
         </div>
-
-        {% render 'blog-comment-form', article: article, section_id: section.id %}
+      {%- endif -%}
+      
+      <div class="custom-blog-content-body">
+        {%- content_for 'block', id: 'blog-post-content', type: '_blog-post-content' %}
       </div>
-    {% endif %}
+
+      {% comment %} Dynamic area for @app blocks only, at the bottom {% endcomment %}
+      {% content_for 'blocks' %}
+
+      {% if blog.comments_enabled? %}
+        <div class="blog-post-comments-container">
+          <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
+
+          <div class="blog-post-comments">
+            {% paginate article.comments by 10 %}
+              {% for comment in article.comments %}
+                <div class="blog-post-comment">
+                  {{ comment.content }}
+                  <div class="blog-post-comment__author">
+                    <span class="blog-post-comment__author-name">{{- comment.author -}}</span>
+                    <span>{{- 'blogs.article.comment_author_separator' | t -}}</span>
+                    <span class="blog-post-comment__date">
+                      {{- comment.created_at | time_tag: format: 'date' -}}
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+
+              <div class="blog-post-comments-pagination">
+                {{- paginate | default_pagination -}}
+              </div>
+            {% endpaginate %}
+          </div>
+
+          {% render 'blog-comment-form', article: article, section_id: section.id %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="custom-blog-right-col">
+      <div class="custom-blog-sidebar">
+        <h2 class="custom-related-stories-title">Related Stories</h2>
+        
+        {% assign count = 0 %}
+        {% for related in blog.articles %}
+          {% if related.id != article.id and count < 4 %}
+            <div class="custom-related-card">
+              <span class="custom-related-tag">{% if related.tags.size > 0 %}{{ related.tags.first | upcase }}{% else %}SKIN EDUCATION{% endif %}</span>
+              <a href="{{ related.url }}" class="custom-related-title">{{ related.title }}</a>
+              {% if related.image %}
+                <a href="{{ related.url }}" class="custom-related-img-link">
+                  <img src="{{ related.image | img_url: '400x' }}" alt="{{ related.title | escape }}" loading="lazy" class="custom-related-image">
+                </a>
+              {% endif %}
+            </div>
+            {% assign count = count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
 
@@ -64,10 +97,183 @@
 </script>
 
 {% stylesheet %}
+  .custom-blog-container {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .custom-blog-columns {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .custom-blog-left-col {
+    flex: 1 1 65%;
+    max-width: 65%;
+    min-width: 0;
+  }
+
+  .custom-blog-right-col {
+    flex: 1 1 35%;
+    max-width: 35%;
+    min-width: 300px;
+    position: relative;
+  }
+
+  .custom-blog-header {
+    margin-bottom: 30px;
+  }
+
+  .custom-blog-breadcrumbs {
+    margin-bottom: 20px;
+  }
+
+  .custom-blog-tag {
+    font-family: var(--font-body-family);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: rgb(var(--color-foreground-rgb));
+  }
+
+  .custom-blog-title {
+    font-family: var(--font-heading-family);
+    font-size: clamp(32px, 4vw, 42px);
+    line-height: 1.1;
+    margin: 0 0 15px 0;
+    color: rgb(var(--color-foreground-rgb));
+    font-weight: 400;
+  }
+
+  .custom-blog-date {
+    font-family: var(--font-body-family);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgb(var(--color-foreground-rgb));
+    margin-bottom: 5px;
+  }
+
+  .custom-blog-image-wrapper {
+    margin-bottom: 30px;
+  }
+
+  .custom-blog-main-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+
+  .custom-blog-content-body {
+    font-family: var(--font-body-family);
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgb(var(--color-foreground-rgb));
+  }
+
+  .custom-blog-sidebar {
+    position: sticky;
+    top: 40px;
+    background-color: rgba(0, 0, 0, 0.03); /* slight tint matching the mock */
+    padding: 24px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,0.2) transparent;
+  }
+
+  .custom-blog-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-blog-sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 4px;
+  }
+
+  .custom-related-stories-title {
+    font-family: var(--font-heading-family);
+    font-size: 28px;
+    font-weight: 400;
+    color: rgb(var(--color-foreground-rgb));
+    margin: 0 0 24px 0;
+    line-height: 1.2;
+  }
+
+  .custom-related-card {
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .custom-related-card:last-child {
+    margin-bottom: 0;
+  }
+
+  .custom-related-tag {
+    font-family: var(--font-body-family);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .custom-related-title {
+    font-family: var(--font-heading-family);
+    font-size: 15px;
+    line-height: 1.3;
+    color: rgb(var(--color-foreground-rgb));
+    text-decoration: none;
+    margin-bottom: 15px;
+    font-weight: 400;
+  }
+
+  .custom-related-title:hover {
+    text-decoration: underline;
+  }
+
+  .custom-related-img-link {
+    display: block;
+    width: 100%;
+  }
+
+  .custom-related-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media screen and (max-width: 989px) {
+    .custom-blog-columns {
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .custom-blog-left-col,
+    .custom-blog-right-col {
+      width: 100%;
+      max-width: 100%;
+      flex: 1 1 100%;
+    }
+    .custom-blog-sidebar {
+      position: static;
+      max-height: none;
+      overflow-y: visible;
+    }
+  }
+
   .blog-post-comments-container {
     width: 100%;
-    max-width: var(--normal-content-width);
-    margin: 0 auto;
+    margin: 40px 0 0 0;
   }
 
   .blog-post-comments {
