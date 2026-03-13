@@ -59,8 +59,27 @@
         "padding-block-end": 80
       }
     },
+    "founder_quote_section_kn34Ni": {
+      "type": "founder-quote-section",
+      "name": "Founder Quote",
+      "settings": {
+        "main_image": "shopify://shop_images/HII_1.png",
+        "bg_image": "shopify://shop_images/ChatGPT_Image_Mar_10_2026_01_19_30_PM.png",
+        "bg_color": "#fdf8f4",
+        "quote_text": "A little corner of my heart — where motherhood, love & learning come together.",
+        "author_name": "Debina",
+        "author_role": "Founder",
+        "text_color": "#593c39",
+        "heart_color": "#e6ccb2",
+        "quote_font_size": 32,
+        "author_font_size": 18,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
     "about_founder_VLb6AA": {
       "type": "about-founder",
+      "disabled": true,
       "name": "About Founder",
       "settings": {
         "bg_color": "#f6ebd8",
@@ -149,6 +168,7 @@
   },
   "order": [
     "main",
+    "founder_quote_section_kn34Ni",
     "about_founder_VLb6AA",
     "journal_section_dkQmNQ"
   ]
