@@ -1,0 +1,176 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "h2",
+            "font": "var(--font-primary--family)",
+            "font_size": "",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "text_animation": "none",
+            "text_animation_delay": 0
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {},
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "color_scheme": "",
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    },
+    "founder_quote_section_kn34Ni": {
+      "type": "founder-quote-section",
+      "disabled": true,
+      "name": "Founder Quote",
+      "settings": {
+        "main_image": "shopify://shop_images/HII_1.png",
+        "bg_image": "shopify://shop_images/ChatGPT_Image_Mar_10_2026_01_19_30_PM.png",
+        "bg_color": "#fdf8f4",
+        "quote_text": "A little corner of my heart — where motherhood, love & learning come together.",
+        "author_name": "Debina",
+        "author_role": "Founder",
+        "text_color": "#593c39",
+        "heart_color": "#e6ccb2",
+        "quote_font_size": 32,
+        "author_font_size": 18,
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "about_founder_VLb6AA": {
+      "type": "about-founder",
+      "name": "About Founder",
+      "settings": {
+        "bg_color": "#f6ebd8",
+        "bg_image": "shopify://shop_images/WhatsApp_Image_2026-03-10_at_12.19.41_PM.jpg",
+        "text_color": "#593c39",
+        "main_heading": "About Me",
+        "name": "Debina Bonnerjee",
+        "role": "Actor • Mom • Entrepreneur",
+        "image_1": "shopify://shop_images/1_5_08d280d0-a67b-48c1-953f-4355c0a36374.png",
+        "bio_text": "<p>Debina Bonnerjee is a celebrated Indian actor, devoted mother, loving wife to Gurmeet Choudhary, and an inspiring digital creator.</p><p>Known for her grace, strength, and authenticity, she has built a journey that beautifully balances her personal and professional worlds.</p><p>From captivating audiences on screen with her powerful performances to sharing real, relatable moments from her life, Debina connects deeply with people across generations. Her content reflects her passion for lifestyle, wellness, and motherhood, creating a space that is warm, honest, and empowering.</p>",
+        "social_heading": "Follow My Journey",
+        "social_instagram": "#",
+        "social_facebook": "#",
+        "social_pinterest": "#",
+        "social_email": "#",
+        "social_youtube": "#",
+        "second_heading": "From my heart to yours...",
+        "image_2": "shopify://shop_images/2_6.png",
+        "quote_text": "<p>Motherhood changed everything for me — it made me more aware, more conscious, and deeply invested in every choice I make for my children. That's what inspired me to step into entrepreneurship. I wanted to create and support things I truly believe in — something that adds real value to every mother's journey. Today, whatever I've invested in comes from a place of love, trust, and responsibility. I want every growing mom to feel confident that she's choosing the very best for her baby, because that's exactly what I would choose for mine..</p>",
+        "footer_tagline": "No perfect moms, just real ones.",
+        "categories": "Lifestyle • Wellness • Parenting • Inspiration"
+      }
+    },
+    "journal_section_dkQmNQ": {
+      "type": "journal-section",
+      "blocks": {
+        "card_8hmhcc": {
+          "type": "card",
+          "settings": {
+            "article": "journal/to-be-moms",
+            "title": "Parenting Tips",
+            "italic_title": false,
+            "use_quote": false,
+            "quote_text": "<p>“ Your quote here ”</p>",
+            "bottom_text": "Real, practical advice from my everyday life.",
+            "button_label": "Explore Parenting Tips",
+            "button_link": ""
+          }
+        },
+        "card_63Teze": {
+          "type": "card",
+          "settings": {
+            "article": "journal/thought-for-the-day",
+            "title": "Thought for the Day.",
+            "italic_title": true,
+            "use_quote": true,
+            "quote_text": "<p>“ Believe in the magic of new beginnings. ”</p>",
+            "bottom_text": "Daily inspiration for a positive life.",
+            "button_label": "Read Today's Thought",
+            "button_link": ""
+          }
+        },
+        "card_dhkQy4": {
+          "type": "card",
+          "settings": {
+            "article": "journal/parenting-tip",
+            "title": "To-Be Moms",
+            "italic_title": false,
+            "use_quote": false,
+            "quote_text": "<p>“ Your quote here ”</p>",
+            "bottom_text": "Guidance for your beautiful journey.",
+            "button_label": "For To-Be Moms",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_8hmhcc",
+        "card_63Teze",
+        "card_dhkQy4"
+      ],
+      "disabled": true,
+      "name": "Custom Journal",
+      "settings": {
+        "bg_color": "#f4ede3",
+        "bg_image": "shopify://shop_images/ChatGPT_Image_Mar_10_2026_01_19_30_PM.png",
+        "text_color": "#5a3a31",
+        "main_heading": "Welcome to My Journal",
+        "search_placeholder": "Search thoughts, tips...",
+        "dynamic_cards": false,
+        "dynamic_list_title": "Latest Entries",
+        "main_blog": "journal",
+        "menu_list_title": "Debina's Favourite Reads",
+        "footer_menu": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "founder_quote_section_kn34Ni",
+    "about_founder_VLb6AA",
+    "journal_section_dkQmNQ"
+  ]
+}
